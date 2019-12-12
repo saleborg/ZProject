@@ -1,0 +1,60 @@
+<h1 id="tableLabel">Produkt Lista</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+<p *ngIf="!products"><em>Loading...</em></p>
+
+
+<div>
+  <h1>Home</h1>
+  <p>{{bodyText}}</p>
+  <button (click)="openModal('custom-modal-1')">Open Modal 1</button>
+  <button (click)="openModal('custom-modal-2')">Open Modal 2</button>
+</div>
+
+<jw-modal id="custom-modal-1">
+  <h1>A Custom Modal!</h1>
+  <p>Home page text: <input type="text" [(ngModel)]="bodyText" /></p>
+  <button (click)="closeModal('custom-modal-1');">Close</button>
+</jw-modal>
+
+<jw-modal id="custom-modal-2">
+  <h1 style="height:1000px">A Tall Custom Modal!</h1>
+  <button (click)="closeModal('custom-modal-2');">Close</button>
+</jw-modal>
+
+
+
+<ul *ngIf="products">
+  <a [routerLink]="['/add-product']">
+    <button type="button" class="btn btn-primary">Add Product</button>
+  </a>
+</ul>
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="products">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Price</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let product of products">
+      <td>{{ product.productId }}</td>
+      <td>{{ product.name }}</td>
+      <td>{{ product.description }}</td>
+      <td>{{ product.price }}</td>
+      <td width="250">
+        <button type="button" class="btn btn-danger mr-1" (click)="deleteTodo(product.productId, i)">Delete</button>
+
+        <a [routerLink]="['/edit-product']">
+          <button type="button" class="btn btn-primary">Edit</button>
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
