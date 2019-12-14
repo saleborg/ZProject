@@ -9,8 +9,7 @@ import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { FetchProductsComponent } from './fetch-products/fetch-products.component'
-import { EditProductComponent } from './edit-product/edit-product.component'
-import { AddProductComponent } from './add-product/add-product.component'
+import { ModalModule } from './_modal';
 
 @NgModule({
   declarations: [
@@ -19,21 +18,21 @@ import { AddProductComponent } from './add-product/add-product.component'
     HomeComponent,
     CounterComponent,
         FetchDataComponent,
-        FetchProductsComponent,
-        EditProductComponent,
-        AddProductComponent
+        FetchProductsComponent
+        
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
-    FormsModule,
+      FormsModule,
+      ModalModule,
+  
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
         { path: 'fetch-data', component: FetchDataComponent },
-        { path: 'fetch-products', component: FetchProductsComponent },
-        { path: 'edit-product', component: EditProductComponent },
-        { path: 'add-product', component: AddProductComponent }
+        { path: 'fetch-products', component: FetchProductsComponent }
+       
     ])
   ],
   providers: [],
