@@ -10,6 +10,8 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { FetchProductsComponent } from './fetch-products/fetch-products.component'
 import { ModalModule } from './_modal';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -17,23 +19,26 @@ import { ModalModule } from './_modal';
     NavMenuComponent,
     HomeComponent,
     CounterComponent,
-        FetchDataComponent,
-        FetchProductsComponent
-        
+    FetchDataComponent,
+    FetchProductsComponent
+
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
-      FormsModule,
-      ModalModule,
-  
+    FormsModule,
+    ModalModule,
+    BrowserAnimationsModule,
+    
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: '', redirectTo: '/fetch-products', pathMatch: 'full' },
+      { path: 'fetch-products', component: FetchProductsComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
-        { path: 'fetch-data', component: FetchDataComponent },
-        { path: 'fetch-products', component: FetchProductsComponent }
-       
-    ])
+      { path: 'fetch-data', component: FetchDataComponent },
+
+
+    ]),
+    ToastrModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

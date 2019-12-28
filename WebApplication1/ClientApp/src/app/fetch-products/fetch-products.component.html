@@ -1,95 +1,331 @@
-<h1 id="tableLabel">Produkt Lista</h1>
-
-<p>This component demonstrates fetching data from the server.</p>
-
-<p *ngIf="!products"><em>Loading...</em></p>
 
 
-
-<ul *ngIf="products">
-  <button class="btn btn-primary" (click)="openAddProduct('addProduct')">Add Product</button>
-</ul>
 <jw-modal id="addProduct">
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+    <h4 class="modal-title" id="modal-basic-title">Lägg till Produkt</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeModal('addProduct')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
- 
-  <div class="modal-body">
-    <form>
+
+
+  <form #myform="ngForm" (ngSubmit)="onSubmitAdd(myform)">
+    <div class="modal-body">
+
       <div class="form-group">
         <label for="name">Name</label>
         <div class="input-group">
-          <input id="newProduct.name" class="form-control" name="newProduct.name">
+          <input id="name" class="form-control" name="name" ngModel>
         </div>
 
         <label for="description">Description</label>
         <div class="input-group">
-          <input id="description" class="form-control" name="description">
+          <textarea id="description" class="form-control" name="description" ngModel rows="5" cols="40"></textarea>
         </div>
 
         <label for="price">Price</label>
         <div class="input-group">
-          <input id="price" class="form-control" placeholder="Number" name="price">
+          <input id="price" class="form-control" placeholder="Number" name="price" ngModel>
         </div>
 
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6 offset-md-0">
+              <h3>Choose File</h3>
+              <div class="form-group">
+                <input type="file" name="image" (change)="fileProgress($event)" />
+              </div>
+              <div *ngIf="fileUploadProgress">
+                Upload progress: {{ fileUploadProgress }}
+              </div>
+              <div class="image-preview mb-3" *ngIf="previewUrl">
+                <img [src]="previewUrl" height="300" />
+              </div>
+
+              <div class="mb-3" *ngIf="uploadedFilePath">
+                {{uploadedFilePath}}
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+
       </div>
-    </form>
-  </div>
-  <div class="modal-footer">
-    <button type="submit" class="btn btn-outline-dark" (click)="saveNewProduct()">Save</button>
-    <button class="btn btn-outline-dark" (click)="closeModal('addProduct');">Close</button>
-  </div>
 
+    </div>
+    <div class="modal-footer">
+      <input class="btn btn-outline-dark" type="submit" value="Save">
+      <button class="btn btn-outline-dark" (click)="closeModal('addProduct');">Close</button>
+    </div>
 
+  </form>
 
 
 </jw-modal>
 
 <jw-modal id="editProduct">
+
   <div class="modal-header">
-    <h4 class="modal-title">Hi there!</h4>
-    <button type="button" class="close" aria-label="Close" (click)="closeModal('editProduct');">
+    <h4 class="modal-title" id="modal-basic-title">Lägg till Produkt</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeModal('editProduct')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
+
   <div class="modal-body">
-    <p>Hello, World!</p>
+
+    <div>
+      <label for="productId">ProductId</label>
+      <div>
+        <input disabled="disabled" [(ngModel)]="productId" id="productId" value="{{productId}}" name="productId" />
+      </div>
+    </div>
+
+    <div>
+      <label for="name">Name</label>
+      <div class="input-group">
+        <input [(ngModel)]="name" id="name" value="{{name}}" name="name" width="40" />
+      </div>
+    </div>
+
+    <div>
+      <label for="description">Description</label>
+      <div class="input-group">
+        <textarea [(ngModel)]="description" id="description" value="{{description}}" name="description" rows="5" cols="20"></textarea>
+      </div>
+    </div>
+
+    <div>
+      <label for="price">Price</label>
+      <div class="input-group">
+        <input [(ngModel)]="price" id="price" value="{{price}}" name="price" />
+      </div>
+    </div>
+
+
+
+    <div>
+      <label for="imageName">ImageName</label>
+      <div class="input-group">
+        <input [(ngModel)]="imageName" id="imageName" value="{{imageName}}" name="imageName" />
+      </div>
+    </div>
+
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="closeModal('editProduct');">Close</button>
+    <input class="btn btn-outline-dark" (click)="saveChanges()" value="Save">
+    <button class="btn btn-outline-dark" (click)="closeModal('editProduct');">Close</button>
+  </div>
+</jw-modal>
+
+<jw-modal id="openDetails">
+
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Lägg till Produkt</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeModal('openDetails')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+
+    <div>
+      <label for="productId">ProductId</label>
+      <div>
+        <input disabled="disabled" [(ngModel)]="productId" id="productId" value="{{productId}}" name="productId" />
+      </div>
+    </div>
+
+    <div>
+      <label for="name">Name</label>
+      <div class="input-group">
+        <input disabled="disabled" [(ngModel)]="name" id="name" value="{{name}}" name="name" />
+      </div>
+    </div>
+
+    <div>
+
+      <label>Image</label>
+      <div>
+        <input disabled="disabled" [(ngModel)]="imageName" id="imageName" value="{{imageName}}" name="imageName" />
+      </div>
+      <div>
+        <img src="assets/uploads/img/{{imageName}}">
+      </div>
+
+
+    </div>
+
+    <div>
+      <label for="description">Description</label>
+      <div class="input-group">
+        <textarea disabled="disabled" [(ngModel)]="description" id="description" value="{{description}}" name="description" rows="5" cols="40"></textarea>
+      </div>
+    </div>
+
+    <div>
+      <label for="price">Price</label>
+      <div class="input-group">
+        <input disabled="disabled" [(ngModel)]="price" id="price" value="{{price}}" name="price" />
+      </div>
+    </div>
+
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-outline-dark" (click)="closeModal('openDetails');">Close</button>
+  </div>
+</jw-modal>
+
+<jw-modal id="openLogin">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Logga in</h4>
+
+  </div>
+  <div class="modal-body">
+    <div class="modal-body">
+      <div>
+        <p><strong>{{error}}</strong></p>
+      </div>
+      <div class="form-group">
+        <label for="username">Användarnamn</label>
+        <div class="input-group">
+          <input [(ngModel)]="username" id="username" value="{{username}}" name="username" width="40" />
+        </div>
+        <label for="password">Lösenord</label>
+        <div class="input-group">
+          <input [(ngModel)]="password" id="password" value="{{password}}" name="password" width="40" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-outline-dark" (click)="login()">Login</button>
   </div>
 </jw-modal>
 
 
-<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="products">
-  <thead>
+
+<jw-modal id="cart">
+
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Kundvagn</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeModal('cart')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <table name="cartTable" class='table table-striped' aria-labelledby="tableLabel" *ngIf="cart">
+      <thead>
+        <tr>
+          <th>Produkt</th>
+          <th>Antal</th>
+          <th>Pris</th>
+          <th>Total</th>
+          
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let od of cart.orderDetails; index as i">
+          <td>{{ od.product.name }}</td>
+          <td>{{ od.units }}</td>
+          <td>{{ od.price }}</td>
+          <td>{{ od.units * od.price }}</td>
+          <td width="50">
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-outline-dark" (click)="submitOrder();">Lägg order</button>
+    <button class="btn btn-outline-dark" (click)="closeModal('cart');">Close</button>
+  </div>
+</jw-modal>
+
+<jw-modal id="openLogin">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Logga in</h4>
+
+  </div>
+  <div class="modal-body">
+    <div class="modal-body">
+      <div>
+        <p><strong>{{error}}</strong></p>
+      </div>
+      <div class="form-group">
+        <label for="username">Användarnamn</label>
+        <div class="input-group">
+          <input [(ngModel)]="username" id="username" value="{{username}}" name="username" width="40" />
+        </div>
+        <label for="password">Lösenord</label>
+        <div class="input-group">
+          <input [(ngModel)]="password" id="password" value="{{password}}" name="password" width="40" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-outline-dark" (click)="login()">Login</button>
+  </div>
+</jw-modal>
+
+
+<button *ngIf="!showProductsBool" class="btn btn-primary" (click)="openLogin()">Login</button>
+
+
+<div *ngIf="showProductsBool">
+  <h1 id="tableLabel">Produkt Lista</h1>
+
+  <p>This component demonstrates fetching data from the server.</p>
+
+  <p *ngIf="!products"><em>Loading...</em></p>
+
+</div>
+
+<ul *ngIf="isAdmin">
+  <button class="btn btn-primary" *ngIf="showProductsBool" (click)="openModal('addProduct')">Add Product</button>
+</ul>
+
+
+<table name="productTable" class='table table-striped' aria-labelledby="tableLabel" *ngIf="products">
+  <thead *ngIf="showProductsBool">
     <tr>
       <th>ID</th>
       <th>Name</th>
       <th>Description</th>
       <th>Price</th>
       <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
     </tr>
   </thead>
-  <tbody>
-    <tr *ngFor="let product of products">
+  <tbody *ngIf="showProductsBool">
+    <tr *ngFor="let product of products; index as i">
       <td>{{ product.productId }}</td>
       <td>{{ product.name }}</td>
       <td>{{ product.description }}</td>
       <td>{{ product.price }}</td>
-      <td width="250">
-
-        <button class="btn btn-primary" (click)="openEditProduct('editProduct', product.productId, i)">Edit</button>
-
-
-        <button type="button" class="btn btn-danger mr-1" (click)="deleteTodo(product.productId, i)">Delete</button>
-
-
+      <td width="50">
+        <button class="btn btn-primary" (click)="openDetails('openDetails', product.productId, i)">Detaljer</button>
+      </td>
+      <td width="50">
+        <button class="btn btn-primary" (click)="addToCart(product.productId, i)">Köp</button>
+      </td>
+      <td width="50">
+        <button *ngIf="isAdmin" class="btn btn-primary" (click)="openEditProduct('editProduct', product.productId, i)">Ändra</button>
+      </td>
+      <td width="50">
+        <button *ngIf="isAdmin" type="button" class="btn btn-danger mr-1" (click)="deleteProduct(product.productId, i)">Ta bort</button>
       </td>
     </tr>
   </tbody>
 </table>
-
+<button *ngIf="showProductsBool" type="button" class="btn btn-primary" (click)="openCart()">Öppna kundvagn</button>
+<button *ngIf="showProductsBool" type="button" class="btn btn-danger mr-1" (click)="logout()">Logga ut</button>

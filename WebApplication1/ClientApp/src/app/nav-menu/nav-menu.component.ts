@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FetchProductsComponent } from '../fetch-products/fetch-products.component'
 
 @Component({
   selector: 'app-nav-menu',
