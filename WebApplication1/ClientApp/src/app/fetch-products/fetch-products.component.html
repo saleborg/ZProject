@@ -206,6 +206,40 @@
 </jw-modal>
 
 
+<jw-modal id="user">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Användare: {{username}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeModal('user')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+
+  </div>
+  <div class="modal-body">
+    <div class="modal-body">
+      <table name="productTable" class='table table-striped' aria-labelledby="tableLabel">
+        <thead>
+          <tr>
+            <th>Ordrar</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Under contruction</td>
+         
+           
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-outline-dark" (click)="closeModal('user');">Close</button>
+  </div>
+</jw-modal>
+
+
 
 <jw-modal id="cart">
 
@@ -224,7 +258,7 @@
           <th>Antal</th>
           <th>Pris</th>
           <th>Total</th>
-          
+
           <th></th>
         </tr>
       </thead>
@@ -282,7 +316,7 @@
 <div *ngIf="showProductsBool">
   <h1 id="tableLabel">Produkt Lista</h1>
 
-  <p>This component demonstrates fetching data from the server.</p>
+  <p>Välj vilka produkter du vill köpa</p>
 
   <p *ngIf="!products"><em>Loading...</em></p>
 
@@ -327,5 +361,12 @@
     </tr>
   </tbody>
 </table>
-<button *ngIf="showProductsBool" type="button" class="btn btn-primary" (click)="openCart()">Öppna kundvagn</button>
-<button *ngIf="showProductsBool" type="button" class="btn btn-danger mr-1" (click)="logout()">Logga ut</button>
+<div>
+  <button *ngIf="showProductsBool" type="button" class="btn btn-primary" (click)="openCart()">Öppna kundvagn</button>
+</div>
+<div>
+  <button *ngIf="showProductsBool" type="button" class="btn btn-primary" (click)="openUser()">Användare</button>
+</div>
+<div>
+  <button *ngIf="showProductsBool" type="button" class="btn btn-danger mr-1" (click)="logout()">Logga ut</button>
+</div>

@@ -3,11 +3,12 @@ import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormControl, NgForm } from "@angular/forms";
 import { Observable, of } from 'rxjs';
 import { Product } from '../Model/product.module';
-import { User } from '../Model/user.module';
+import { User, OrderList } from '../Model/user.module';
 import { ModalService } from '../_modal';
 import { Cart, getCart } from '../Model/cart.module';
 import { OrderDetail, getOrderDetail } from '../Model/orderdetail.module';
 import { ToastrService } from 'ngx-toastr';
+import { Order } from '../Model/order.module';
 
 
 
@@ -24,7 +25,6 @@ import { ToastrService } from 'ngx-toastr';
 export class FetchProductsComponent {
 
   public products: Product[];
-
   public user: User;
   isAdmin: boolean = false;
   username = "";
@@ -41,6 +41,7 @@ export class FetchProductsComponent {
   error = "";
   imageUrl = "";
   cart: Cart;
+  orders: Order[];
 
   private _http: HttpClient;
 
@@ -49,7 +50,7 @@ export class FetchProductsComponent {
       'Content-Type': 'application/json',
     })
   };
-    
+
 
 
 
@@ -76,9 +77,8 @@ export class FetchProductsComponent {
 
 
     this._http.get<User>(this.baseUrl + 'api/apishop/login/' + this.username + '/' + this.password).subscribe(result => {
-      this.user = result
+      this.user = result;
       if (this.user != null) {
-
         this.isAdmin = this.user.isAdmin;
         this.modalService.close("openLogin");
         this.fetchData();
@@ -151,21 +151,21 @@ export class FetchProductsComponent {
 
   async fetchData() {
     await this._http.get<Product[]>(this.baseUrl + 'api/apishop').subscribe(result => {
-      
+
 
       this.products = result
 
-      
-      
+
+
 
 
     }, error => console.error(error));
 
   }
 
-  
 
- 
+
+
 
   openDetails(window: string, productId: number, index: number) {
     this.populateProduct(index);
@@ -173,7 +173,7 @@ export class FetchProductsComponent {
 
   }
 
-  populateProduct(index: number)  {
+  populateProduct(index: number) {
     this.index = index;
     this.name = this.products[index].name;
     this.description = this.products[index].description;
@@ -266,7 +266,7 @@ export class FetchProductsComponent {
     var prod = this.products[index];
 
     var od = getOrderDetail(prod, prod.price, 1);
-    
+
     if (this.cart == null) {
 
       let ods: OrderDetail[] = [{ product: prod, price: prod.price, units: 1 }];
@@ -284,27 +284,44 @@ export class FetchProductsComponent {
       }
 
 
-      
+
     }
-    
+
   }
 
   submitOrder() {
-    this.toastr.success('Ordern lagd');
+
     this.modalService.close('cart');
 
+    this._http.post(this.baseUrl + 'api/apishop/placeorder/' + this.user.userId, this.cart, this.httpOptions).subscribe(results => {
+      this.toastr.success('Ordern lagd');
+      this.cart = null;
 
-
-
-
-
-
+    }, error => { console.error(error), this.toastr.error(error) }
+    );
 
   }
 
 
 
+  openUser() {
+    this.modalService.open('user');
+
+    this._http.get<User>(this.baseUrl + 'api/apishop/login/' + this.username + '/' + this.password).subscribe(result => {
+      this.user = result
+      if (this.user == null) {
+        this.error = "User or password is incorect";
+      }
+    }, error => console.error(error));
+
+
+  }
+
+
 }
+
+
+
 
 interface EditProduct {
   name: string;

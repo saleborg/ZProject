@@ -118,11 +118,12 @@ namespace Webshop.Controllers
         }
 
 
-        [HttpPost("PlaceOrder/{userId}")]
-        public async Task<ActionResult<bool>> PlaceOrder(Cart cart, int userId)
+        [HttpPost("placeorder/{userId}")]
+        public async Task<ActionResult> placeorder(Cart cart, int userId)
         {
             try
             {
+                User u = _context.User.Find(userId);
                 using (var c = _context)
                 {
                     var order = new Order();
@@ -137,12 +138,10 @@ namespace Webshop.Controllers
 
                         ));
                     order.Date = System.DateTime.Today;
-                    var contextUser = c.User.Find(userId);
-                    contextUser.OrderList.Add(order);
-                    c.Update(contextUser);
+                    u.OrderList.Add(order);
+                    c.Update(u);
                     await c.SaveChangesAsync();
                 }
-
                 return StatusCode(201);
             }
             catch (Exception)
@@ -150,6 +149,8 @@ namespace Webshop.Controllers
                 return NotFound();
             }
         }
+
+
 
 
         // POST: api/ApiShop
